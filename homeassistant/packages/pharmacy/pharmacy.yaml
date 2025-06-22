@@ -1,0 +1,21 @@
+command_line:
+  - sensor:
+      name: Closest Pharmacy On-Duty
+      unique_id: pharmacy_closest_on_duty
+      icon: mdi:medication
+      scan_interval: 21600 # Every 6 hours.
+      command: >
+        /config/packages/pharmacy/on-duty/bin \
+          --lat={{ state_attr("zone.home", "latitude") }} \
+          --lon={{ state_attr("zone.home", "longitude") }}
+      value_template: >
+        {% set pharmacy = value | from_json %}
+        {{ pharmacy.distance }}
+      json_attributes:
+        - address
+        - instructions
+        - google_maps_link
+        - phone
+        - second_phone
+      device_class: distance
+      unit_of_measurement: km
