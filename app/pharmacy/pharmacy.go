@@ -17,6 +17,7 @@ type Pharmacy struct {
 	SecondPhone  string `json:"second_phone,omitempty"`
 
 	GoogleMapsLink string    `json:"google_maps_link,omitempty"`
+	WazeLink       string    `json:"waze_link,omitempty"`
 	GeoPoint       geo.Point `json:"geo_point,omitempty"`
 	DistanceKM     float64   `json:"distance,omitempty"`
 }
@@ -36,6 +37,12 @@ func FindClosest(pharmacies []Pharmacy, point geo.Point) *Pharmacy {
 	minDistance := float64(0)
 
 	for _, pharmacy := range pharmacies {
+		if pharmacy.GoogleMapsLink == "" {
+			continue
+		}
+		pharmacy.GeoPoint = geo.NewPointFromGoogleMapsLink(pharmacy.GoogleMapsLink)
+		pharmacy.WazeLink = geo.NewWazeLinkFromGeoPoint(&pharmacy.GeoPoint)
+
 		_, distance := geo.FindClosest(pharmacy.GeoPoint, point)
 		if closest == nil || distance < minDistance {
 			closest = &pharmacy

@@ -18,6 +18,7 @@ command_line:
       json_attributes:
         - address
         - instructions
+        - waze_link
         - google_maps_link
         - phone
         - second_phone

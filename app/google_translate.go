@@ -1,14 +1,12 @@
-package translate
+package main
 
 import (
 	"bytes"
 	"encoding/json"
 	"net/http"
-	"os"
 )
 
-func Translate(text string) (string, error) {
-	apiKey := os.Getenv("GOOGLE_API_KEY")
+func Translate(apiKey, text string) (string, error) {
 	url := "https://translation.googleapis.com/language/translate/v2?key=" + apiKey
 
 	reqBody := map[string]interface{}{

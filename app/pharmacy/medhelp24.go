@@ -5,8 +5,6 @@ import (
 	"strings"
 
 	"github.com/gocolly/colly/v2"
-
-	"github.com/semyonchetvertnyh/ha-cyprus-pharmacy-on-duty/app/geo"
 )
 
 type MedHelp24Parser struct {
@@ -74,7 +72,9 @@ func (p *MedHelp24Parser) parseDetailsPage(url string) (Pharmacy, error) {
 	})
 
 	p.scraper.OnHTML("div.pane-content > a", func(e *colly.HTMLElement) {
-		pharmacy.GoogleMapsLink = e.Attr("href")
+		if pharmacy.GoogleMapsLink == "" {
+			pharmacy.GoogleMapsLink = e.Attr("href")
+		}
 	})
 
 	// p.scraper.OnHTML("div.field-name-field-pharmacy-name div.field-item", func(e *colly.HTMLElement) {
@@ -89,10 +89,6 @@ func (p *MedHelp24Parser) parseDetailsPage(url string) (Pharmacy, error) {
 
 	if err := p.scraper.Visit(url); err != nil {
 		return Pharmacy{}, fmt.Errorf("failed to visit main page: %w", err)
-	}
-
-	if pharmacy.GoogleMapsLink != "" {
-		pharmacy.GeoPoint = geo.NewPointFromGoogleMapsLink(pharmacy.GoogleMapsLink)
 	}
 
 	// Hardcode.

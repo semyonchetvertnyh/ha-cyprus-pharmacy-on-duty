@@ -8,7 +8,6 @@ import (
 
 	"github.com/semyonchetvertnyh/ha-cyprus-pharmacy-on-duty/app/geo"
 	"github.com/semyonchetvertnyh/ha-cyprus-pharmacy-on-duty/app/pharmacy"
-	"github.com/semyonchetvertnyh/ha-cyprus-pharmacy-on-duty/app/translate"
 )
 
 const City = "Limassol"
@@ -28,8 +27,8 @@ func main() {
 	pharmacies = pharmacy.FilterToCity(pharmacies, City)
 	closestPharmacy := pharmacy.FindClosest(pharmacies, origin)
 
-	if _, hasApiKey := os.LookupEnv("GOOGLE_API_KEY"); hasApiKey {
-		if instructions, err := translate.Translate(closestPharmacy.Instructions); err == nil {
+	if apiKey, hasApiKey := os.LookupEnv("GOOGLE_API_KEY"); hasApiKey {
+		if instructions, err := Translate(apiKey, closestPharmacy.Instructions); err == nil {
 			closestPharmacy.Instructions = instructions
 		}
 	}
