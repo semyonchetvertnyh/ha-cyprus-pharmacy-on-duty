@@ -13,6 +13,8 @@ import (
 const City = "Limassol"
 
 func main() {
+	// os.Setenv("GOOGLE_API_KEY", "UNCOMMENT AND PUT YOUR API KEY HERE")
+
 	origin, done := parseOriginPointFromFlags()
 	if done {
 		return
